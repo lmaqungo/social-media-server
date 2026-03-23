@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client"
+  output          = "../generated/prisma"
+  previewFeatures = ["fullTextSearchPostgres"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                Int          @id @default(autoincrement())
+  username          String       @unique
+  displayPictureUrl String?
+  bio               String?
+  website           String?
+  admin             Boolean      @default(false)
+  posts             Post[]
+  replies           Reply[]
+  messages          Message[]    @relation("author")
+  dateJoined        String
+  followedBy        Follows[]    @relation("followedBy")
+  following         Follows[]    @relation("following")
+  userLikes         PostLikes[]
+  replyLikes        ReplyLikes[]
+}
+
+model Follows {
+  followedBy   User @relation("followedBy", fields: [followingId], references: [id])
+  followedById Int
+  following    User @relation("following", fields: [followedById], references: [id])
+  followingId  Int
+
+  @@id(name: "followId", [followingId, followedById])
+}
+
+model PostLikes {
+  likedBy   User @relation(fields: [likedById], references: [id])
+  likedById Int
+  post      Post @relation(fields: [postId], references: [id])
+  postId    Int
+
+  @@id(name: "postLikeId", [likedById, postId])
+}
+
+model ReplyLikes {
+  likedById Int
+  replyId   Int
+  likedBy   User  @relation(fields: [likedById], references: [id])
+  reply     Reply @relation(fields: [replyId], references: [id])
+
+  @@id(name: "replyLikeId", [likedById, replyId])
+}
+
+model Post {
+  id            Int         @id @default(autoincrement())
+  content       String
+  attachmentURL String?
+  gifId         String?
+  author        User        @relation(fields: [authorId], references: [id])
+  authorId      Int
+  replies       Reply[]
+  postDate      String
+  likedBy       PostLikes[]
+}
+
+model Reply {
+  id             Int          @id @default(autoincrement())
+  content        String
+  author         User         @relation(fields: [authorId], references: [id])
+  authorId       Int
+  postDate       String
+  originalPost   Post         @relation(fields: [originalPostId], references: [id])
+  originalPostId Int
+  likedBy        ReplyLikes[]
+}
+
+model Message {
+  id       Int    @id @default(autoincrement())
+  authorId Int
+  author   User   @relation("author", fields: [authorId], references: [id])
+  chatId   String
+  chat     Chat   @relation(fields: [chatId], references: [id])
+  content  String
+  timeSent String
+}
+
+model Chat {
+  id       String    @id @default(uuid())
+  members  Int[]
+  messages Message[]
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
