@@ -2,12 +2,10 @@
   
   "compilerOptions": {
     
-    "rootDir": "./src",
     "outDir": "./dist",
     "module": "nodenext",
     "target": "ES2022",
     "esModuleInterop": true,
-    
     
     "sourceMap": false,
     "declaration": false,
@@ -24,4 +22,5 @@
     "skipLibCheck": true,
   }, 
   "include": ["src/**/*"],
+  "exclude": ["prisma", "generated/**/*", "node_modules", "*.json", "*.js", "*.md"]
 }
