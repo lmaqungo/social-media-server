@@ -2,7 +2,8 @@ import dotenv from 'dotenv'
 dotenv.config({ quiet: true })
 
 const { NODE_ENV, LOCAL_DB_URL, REMOTE_DB_URL, LOCAL_ORIGIN, 
-REMOTE_ORIGIN } = process.env;
+REMOTE_ORIGIN, GOOGLE_CLIENT_ID, 
+GOOGLE_CLIENT_SECRET } = process.env;
 
 function getDbUrl() {
     switch(NODE_ENV) {
@@ -24,5 +25,7 @@ function getClientOrigin(){
 
 const dbURL = getDbUrl();
 const origin = getClientOrigin();
+const clientID = GOOGLE_CLIENT_ID; 
+const clientSecret = GOOGLE_CLIENT_SECRET; 
 
-export { dbURL, origin };
+export { dbURL, origin, clientID, clientSecret };

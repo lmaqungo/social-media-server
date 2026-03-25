@@ -1,8 +1,9 @@
 import passport, { type Profile } from 'passport'
 import { Strategy as GoogleStrategy, type VerifyCallback} from 'passport-google-oauth20'
-import { prisma } from '../../lib/prisma.js';
+import { prisma } from '../lib/prisma.js';
 import BetterDate from '../utils/betterdate.js';
 import { Strategy as CustomStrategy } from 'passport-custom'; 
+import { clientID, clientSecret } from '../utils/loadEnvVars.js'; 
 
 
 const oAuthVerifyCallback = async function(accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) {
@@ -83,8 +84,8 @@ const guestVerifyCallback = async function(req, done: VerifyCallback) {
 }
 
 const googleStrategy = new GoogleStrategy({
-    clientID: "1092230125187-8uvbvcn69g4v853v1bfcjrm2mlf5ana9.apps.googleusercontent.com", 
-    clientSecret: "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", 
+    clientID: clientID || "error: no id", 
+    clientSecret: clientSecret || "error: no secret", 
     callbackURL: "http://localhost:3000/auth/google/callback"
     }, oAuthVerifyCallback
 )

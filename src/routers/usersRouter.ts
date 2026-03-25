@@ -1,5 +1,5 @@
 import express from 'express'; 
-import { prisma } from '../../lib/prisma.js'; 
+import { prisma } from '../lib/prisma.js'; 
 import isAuth from '../middlewares/authMiddleware.js';
 import { NotFoundError, UnauthorizedError, ValidationError } from '../errors/customErrors.js';
 import utils from '../utils/helperFns.js'
@@ -84,8 +84,6 @@ router.get('/users/:userId', isAuth, async (req, res) => {
             }
         }
     })
-
-    console.log(user)
 
     res.json(user)
 

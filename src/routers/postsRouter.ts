@@ -1,5 +1,5 @@
 import express from 'express'; 
-import { prisma } from '../../lib/prisma.js'; 
+import { prisma } from '../lib/prisma.js'; 
 import BetterDate from '../utils/betterdate.js';
 import isAuth from '../middlewares/authMiddleware.js';
 import { NotFoundError, UnauthorizedError, ValidationError } from '../errors/customErrors.js';

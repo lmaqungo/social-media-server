@@ -1,5 +1,5 @@
 import express from 'express'; 
-import { prisma } from '../../lib/prisma.js'; 
+import { prisma } from '../lib/prisma.js'; 
 import BetterDate from '../utils/betterdate.js';
 import isAuth from '../middlewares/authMiddleware.js';
 import { NotFoundError, UnauthorizedError, ValidationError } from '../errors/customErrors.js';
@@ -26,8 +26,7 @@ router.get('/replies/:postId', isAuth, async (req, res) => {
     if(!replies) {
         throw new NotFoundError()
     }
-    // res.json(replies)
-    console.log(replies); 
+    res.json(replies)
 })
 
 /**
@@ -57,7 +56,6 @@ router.post('/replies/:postId/new', isAuth, async (req, res) => {
         if (!newReply) {
             throw new ValidationError(); 
         }
-        console.log(newReply); 
         res.json(newReply)
     } else {
         throw new UnauthorizedError(); 

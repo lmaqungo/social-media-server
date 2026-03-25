@@ -22,7 +22,6 @@ router.get('/auth/google/callback',
 )
 
 router.post('/auth/logout', (req, res, next) => {
-    console.log('route is reached')
     req.logout(function(err) { if (err) { return next(err); } res.sendStatus(200); })
     }
 )
