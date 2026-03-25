@@ -1,5 +1,5 @@
 class BetterDate extends Date{
-    constructor(options = {}){
+    constructor(options = {dateString: null}){
         if(options.dateString) {
             super(options.dateString)
         } else{
