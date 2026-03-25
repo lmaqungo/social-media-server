@@ -22,5 +22,5 @@
     "skipLibCheck": true,
   }, 
   "include": ["src/**/*"],
-  "exclude": ["prisma", "generated/**/*", "node_modules", "*.json", "*.js", "*.md"]
+  "exclude": ["prisma", "node_modules", "*.json", "*.js", "*.md"]
 }
