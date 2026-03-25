@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'; 
 import BetterDate from './betterdate.js';
-import { prisma } from '../../lib/prisma.js';
+import { prisma } from '../lib/prisma.js';
 import utils from './helperFns.js'
 
 function createRandomUser() {

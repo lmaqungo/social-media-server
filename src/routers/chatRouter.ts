@@ -1,5 +1,5 @@
 import express from 'express'; 
-import { prisma } from '../../lib/prisma.js'; 
+import { prisma } from '../lib/prisma.js'; 
 import isAuth from '../middlewares/authMiddleware.js';
 import { UnauthorizedError } from '../errors/customErrors.js';
 import BetterDate from '../utils/betterdate.js';
@@ -66,8 +66,6 @@ router.get('/chats', isAuth, async (req, res) => {
                 recipient: recipient
             }
         })
-        console.log("Contacts:")
-        console.log(contacts)
         res.json(contacts)
 
     } else {
@@ -130,7 +128,6 @@ router.get('/chats/:chatId', isAuth, async (req, res) => {
                     recipient, 
                     chat
                 }
-                console.log(responseObj)
                 res.json(responseObj)
             }
         }

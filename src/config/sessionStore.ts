@@ -1,4 +1,4 @@
-import { prisma } from "../../lib/prisma.js";
+import { prisma } from "../lib/prisma.js";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import expressSession from 'express-session'
 
