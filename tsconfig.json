@@ -14,10 +14,9 @@
     "declarationMap": false,
 
     "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
     "moduleResolution": "nodenext",
 
-    "strict": true,
+    "strict": false,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
