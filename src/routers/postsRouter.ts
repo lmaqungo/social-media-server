@@ -84,8 +84,7 @@ router.post('/posts/:postId/like', isAuth, async (req, res) => {
 router.post('/posts/:postId/unlike', isAuth, async (req, res) => {
     if(req.user) {
         const { postId } = req.params
-    const url = 'http://localhost:3000/posts/new'; 
-
+    
         const like = await prisma.postLikes.delete({
             where: {
                 postLikeId: {
