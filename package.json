@@ -5,10 +5,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1", 
-    "dev": "tsx watch ./src/app.ts", 
-    "start": "node ./dist/src/app.js", 
-    "build": "npm install && prisma generate && tsc"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch ./src/app.ts",
+    "start": "node ./dist/src/app.js",
+    "build": "npm install && prisma generate && prisma db push && tsc"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/lmaqungo/social-media-server#readme",
   "dependencies": {
+    "@prisma/adapter-neon": "^7.5.0",
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "@quixo3/prisma-session-store": "^3.1.19",
