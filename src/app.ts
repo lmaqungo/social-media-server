@@ -14,12 +14,20 @@ import { origin } from './utils/loadEnvVars.js';
 
 const app = express()
 
-app.use(cors({credentials: true, origin: origin }))
+app.use(cors({
+    credentials: true,
+    origin: origin, 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+    
+}))
 app.use(express.urlencoded({ extended: true }))
 
 app.use(express.json())
-app.use(sessionStore)
 
+app.set('trust proxy', 1)
+
+app.use(sessionStore)
 app.use(passport.initialize())
 app.use(passport.session())
 
