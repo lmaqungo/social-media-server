@@ -16,6 +16,7 @@ const app = express()
 
 app.use(cors({credentials: true, origin: origin }))
 app.use(express.urlencoded({ extended: true }))
+
 app.use(express.json())
 app.use(sessionStore)
 

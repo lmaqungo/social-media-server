@@ -15,7 +15,6 @@ function getClientOrigin(){
     }
 }
 
-
 const origin = getClientOrigin();
 const clientID = GOOGLE_CLIENT_ID; 
 const clientSecret = GOOGLE_CLIENT_SECRET; 
