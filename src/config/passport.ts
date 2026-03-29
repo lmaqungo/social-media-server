@@ -103,13 +103,13 @@ passport.serializeUser((user, done) => {
 })
 
 passport.deserializeUser( async (id, done) => {
-    // console.log(`deserialized user: ${id}, type: ${typeof id}`)
     try{
         const user = await prisma.user.findUnique({
             where: {
                 id: id as number
             }
         })
+        console.log(`deserialized user: ${user}`)
         done(null, user)
     } catch (err) {
         done(err)
