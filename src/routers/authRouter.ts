@@ -12,6 +12,7 @@ router.get('/auth/google',
 router.get('/auth/guest',
     passport.authenticate('guest', { failureRedirect }), 
     (req, res) => {
+        console.log('guest login success!')
         res.redirect(origin)
     }
 )
