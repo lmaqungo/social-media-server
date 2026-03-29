@@ -2,7 +2,9 @@
 // npm install --save-dev prisma dotenv
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
-import { dbURL } from "./src/utils/loadEnvVars.js";
+
+
+const { NODE_ENV, LOCAL_DB_URL, NEON_DIRECT_URL } = process.env
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
@@ -10,6 +12,6 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: dbURL,
+    url: NODE_ENV === 'dev' ? LOCAL_DB_URL : NODE_ENV === 'prod' ? NEON_DIRECT_URL : null ,
   },
 });
