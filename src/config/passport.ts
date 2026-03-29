@@ -84,7 +84,7 @@ const guestVerifyCallback = async function(req, done: VerifyCallback) {
 }
 
 const googleStrategy = new GoogleStrategy({
-    clientID: clientID || "error: no id", 
+    clientID: clientID || "error: no id" , 
     clientSecret: clientSecret || "error: no secret", 
     callbackURL: `${origin}/auth/google/callback`
     }, oAuthVerifyCallback
