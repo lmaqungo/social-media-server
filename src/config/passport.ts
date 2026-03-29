@@ -109,7 +109,6 @@ passport.deserializeUser( async (id, done) => {
                 id: id as number
             }
         })
-        console.log(`deserialized user: ${user}`)
         done(null, user)
     } catch (err) {
         done(err)
