@@ -4,7 +4,9 @@ import { prisma } from '../lib/prisma.js';
 import BetterDate from '../utils/betterdate.js';
 import { Strategy as CustomStrategy } from 'passport-custom'; 
 import { clientID, clientSecret } from '../utils/loadEnvVars.js'; 
-import { origin } from '../utils/loadEnvVars.js';
+import "dotenv/config"
+
+const { NODE_ENV } = process.env;
 
 const oAuthVerifyCallback = async function(accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) {
     try{ 
@@ -84,9 +86,9 @@ const guestVerifyCallback = async function(req, done: VerifyCallback) {
 }
 
 const googleStrategy = new GoogleStrategy({
-    clientID: clientID || "error: no id" , 
+    clientID: clientID || "error: no id", 
     clientSecret: clientSecret || "error: no secret", 
-    callbackURL: `${origin}/auth/google/callback`
+    callbackURL: `${NODE_ENV === 'prod' ? 'https://brainrotapp.netlify.app' : 'http://localhost:3000'}/auth/google/callback`
     }, oAuthVerifyCallback
 )
 
