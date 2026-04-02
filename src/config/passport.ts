@@ -88,7 +88,7 @@ const guestVerifyCallback = async function(req, done: VerifyCallback) {
 const googleStrategy = new GoogleStrategy({
     clientID: clientID || "error: no id", 
     clientSecret: clientSecret || "error: no secret", 
-    callbackURL: `${NODE_ENV === 'prod' ? 'https://brainrotapp.netlify.app' : 'http://localhost:3000'}/auth/google/callback`
+    callbackURL: `${NODE_ENV === 'prod' ? 'https://brainrot-server-26bw.onrender.com' : 'http://localhost:3000'}/auth/google/callback`
     }, oAuthVerifyCallback
 )
 
