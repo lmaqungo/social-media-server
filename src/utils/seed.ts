@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker'; 
 import BetterDate from './betterdate.js';
 import { prisma } from '../lib/prisma.js';
-import utils from './helperFns.js'
 
 function createRandomUser() {
     return {
@@ -44,13 +43,49 @@ async function newPost({content, authorId, postDate}) {
     })
 }
 
-function seedPosts() {
-    console.log('seeding posts...'); 
-    utils.extractIds(users).forEach(userId => {
-        for(let i = 0; i < 3; i++) {
-            newPost({content: createRandomPost(), authorId: userId, postDate: new BetterDate({dateString: faker.date.anytime().toString()}).now()})
-        }
-    })
+async function clearPosts(){ 
+    console.log('deleting all posts...')
+    await prisma.postLikes.deleteMany({})
+    await prisma.post.deleteMany({})
+    console.log('done')
 }
+
+async function seedPosts() {
+    console.log('seeding posts...'); 
+    const posts = [
+        {
+            content: " i think about how every person walking past me has an entire universe inside them — inside jokes with their sister, a song that makes them cry, a recipe from their grandma they make when they miss home. we're all just walking around carrying whole worlds and most of the time we don't even say hi to each other. anyway i said good morning to a stranger today and they smiled really big and i thought about it for the rest of the day", 
+            gifId: ''
+        } ,
+        {
+            content: 'you are so deeply loved by people who have never even met you yet', 
+            gifId: 'C9CoWYJBtw3uw5ofCb'
+        }, 
+        { 
+            content: `unpopular opinion: "authenticity" as a personality trait is a paradox. the moment you're performing authenticity for an audience it stops being authentic. we're all just curating a self and calling it truth. discuss.
+            
+            the modern condition is being fluent in the language of self-improvement while structurally incapable of rest. we've turned healing into a productivity metric and nobody's stopped to ask why.`, 
+            gifId: ''
+        }
+    ]
+    let postIndex = 0
+    for (const authorId of [8, 7, 4]){
+
+        await prisma.post.create({
+            data: {
+                content: posts[postIndex].content, 
+                authorId, 
+                gifId: posts[postIndex].gifId.length > 0 ? posts[postIndex].gifId : null, 
+                postDate: new BetterDate({dateString: faker.date.anytime().toString()}).now()
+            }
+        })
+        postIndex+=1
+    }
+    
+}
+
+
+
+
 
 
