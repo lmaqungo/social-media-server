@@ -67,35 +67,31 @@ router.get('/posts/:id', isAuth, async (req, res) => {
 })
 
 router.post('/posts/:postId/like', isAuth, async (req, res) => {
-    if(req.user) {
-        const { postId } = req.params
+    const { postId } = req.params
 
-        const like = await prisma.postLikes.create({
-            data: {
-                postId: Number(postId), 
-                likedById: req.user.id
-            }
-        })
+    const like = await prisma.postLikes.create({
+        data: {
+            postId: Number(postId), 
+            likedById: req.user.id
+        }
+    })
 
-        res.sendStatus(200); 
-    }
+    res.sendStatus(200); 
 })
 
 router.post('/posts/:postId/unlike', isAuth, async (req, res) => {
-    if(req.user) {
-        const { postId } = req.params
-    
-        const like = await prisma.postLikes.delete({
-            where: {
-                postLikeId: {
-                    likedById: req.user.id, 
-                    postId: Number(postId)
-                }
+    const { postId } = req.params
+
+    const like = await prisma.postLikes.delete({
+        where: {
+            postLikeId: {
+                likedById: req.user.id, 
+                postId: Number(postId)
             }
-        })
- 
-        res.sendStatus(200); 
-    }
+        }
+    })
+
+    res.sendStatus(200);
 })
 
 /** --------- POST ROUTES --------
@@ -103,25 +99,20 @@ router.post('/posts/:postId/unlike', isAuth, async (req, res) => {
  */
 
 router.post('/posts/new', isAuth, async (req, res) => {
-    if(req.user){
-        const { content, attachmentURL, gifId } = req.body;
-        const newPost = await prisma.post.create({
-            data: {
-                content, 
-                postDate: new BetterDate().now(), 
-                authorId: req.user?.id, 
-                attachmentURL, 
-                gifId
-            }
-        })
-        if(!newPost) {
-            throw new ValidationError()
+    const { content, attachmentURL, gifId } = req.body;
+    const newPost = await prisma.post.create({
+        data: {
+            content, 
+            postDate: new BetterDate().now(), 
+            authorId: req.user?.id, 
+            attachmentURL, 
+            gifId
         }
-        res.json(newPost); 
-        // res.sendStatus(200) 
-    } else {
-        throw new UnauthorizedError(); 
+    })
+    if(!newPost) {
+        throw new ValidationError()
     }
+    res.json(newPost); 
 });
 
 const storage = multer.memoryStorage()
@@ -148,7 +139,6 @@ router.post('/posts/upload', upload.single('file'), async (req, res) => {
     });
 
     if (error) {
-        console.log(error)
         return res.sendStatus(500);
     }
 

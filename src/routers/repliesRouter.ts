@@ -17,7 +17,12 @@ router.get('/replies/:postId', isAuth, async (req, res) => {
             originalPostId: Number(postId)
         }, 
         include: {
-            author: true
+            author: true, 
+            likedBy: {
+                select: {
+                    likedById: true
+                }
+            }
         }, 
         orderBy: {
             id: 'asc'
@@ -34,64 +39,56 @@ router.get('/replies/:postId', isAuth, async (req, res) => {
  */
 
 router.post('/replies/:postId/new', isAuth, async (req, res) => {
-    if (req.user) {
-        const { reply } = req.body; 
-        const { postId } = req.params; 
-        const newReply = await prisma.reply.create({
-            data: {
-                content: reply, 
-                authorId: req.user.id, 
-                postDate: new BetterDate().now(), 
-                originalPostId: Number(postId)
-            }, 
-            include: {
-                author: true, 
-                likedBy: {
-                    select: {
-                        likedById: true
-                    }
+    const { reply } = req.body; 
+    const { postId } = req.params; 
+    const newReply = await prisma.reply.create({
+        data: {
+            content: reply, 
+            authorId: req.user.id, 
+            postDate: new BetterDate().now(), 
+            originalPostId: Number(postId)
+        }, 
+        include: {
+            author: true, 
+            likedBy: {
+                select: {
+                    likedById: true
                 }
             }
-        })
-        if (!newReply) {
-            throw new ValidationError(); 
         }
-        res.json(newReply)
-    } else {
-        throw new UnauthorizedError(); 
+    })
+    if (!newReply) {
+        throw new ValidationError(); 
     }
+    res.json(newReply)
 })
 
 router.post('/replies/:replyId/like', isAuth, async (req, res) => {
-    if(req.user) {
-        const { replyId } = req.params
+    const { replyId } = req.params
 
-        const like = await prisma.replyLikes.create({
-            data: {
-                replyId: Number(replyId), 
-                likedById: req.user.id
-            }
-        })
+    const like = await prisma.replyLikes.create({
+        data: {
+            replyId: Number(replyId), 
+            likedById: req.user.id
+        }
+    })
 
-        res.sendStatus(200); 
-    }
+    res.sendStatus(200); 
 })
 
 router.post('/replies/:replyId/unlike', isAuth, async (req, res) => {
-    if(req.user) {
-        const { replyId } = req.params
+    const { replyId } = req.params
 
-        const like = await prisma.replyLikes.delete({
-            where: {
-                replyLikeId: {
-                    likedById: req.user.id, 
-                    replyId: Number(replyId)
-                }
+    const like = await prisma.replyLikes.delete({
+        where: {
+            replyLikeId: {
+                likedById: req.user.id, 
+                replyId: Number(replyId)
             }
-        })
- 
-        res.sendStatus(200); 
-    }
+        }
+    })
+
+    res.sendStatus(200); 
 })
 
 export default router; 

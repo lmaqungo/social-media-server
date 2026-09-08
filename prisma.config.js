@@ -3,7 +3,6 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
-
 const { NODE_ENV, LOCAL_DB_URL, NEON_DIRECT_URL } = process.env
 
 export default defineConfig({

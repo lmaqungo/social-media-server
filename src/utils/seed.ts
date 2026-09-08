@@ -69,7 +69,7 @@ async function seedPosts() {
         }
     ]
     let postIndex = 0
-    for (const authorId of [8, 7, 4]){
+    for (const authorId of [2, 3, 4]){
 
         await prisma.post.create({
             data: {
@@ -83,6 +83,8 @@ async function seedPosts() {
     }
     
 }
+
+seedPosts()
 
 
 

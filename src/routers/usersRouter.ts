@@ -13,41 +13,39 @@ const router = express.Router();
  */
 
 router.get('/users/loggedUser', isAuth, async(req, res) => {
-    if(req.user) {
-        const loggedUser = await prisma.user.findUnique({
-            where: {
-                id: req.user.id
-            }, 
-            include: {
-                following: {
-                    select: {
-                        followingId: true
-                        }
-                    }, 
-                followedBy: {
-                    select: {
-                        followedById: true
+    const loggedUser = await prisma.user.findUnique({
+        where: {
+            id: req.user.id
+        }, 
+        include: {
+            following: {
+                select: {
+                    followingId: true
                     }
                 }, 
-                posts: {
-                    include: {
-                        author:true, 
-                        replies: true, 
-                        likedBy: {
-                            select: {
-                                likedById: true
-                            }
+            followedBy: {
+                select: {
+                    followedById: true
+                }
+            }, 
+            posts: {
+                include: {
+                    author:true, 
+                    replies: true, 
+                    likedBy: {
+                        select: {
+                            likedById: true
                         }
-                    }, 
-                    orderBy: {
-                        id: 'desc'
                     }
+                }, 
+                orderBy: {
+                    id: 'desc'
                 }
             }
-        })
+        }
+    })
 
-        res.json(loggedUser)
-    }
+    res.json(loggedUser)
 })
 
 router.get('/users/:userId', isAuth, async (req, res) => {
@@ -90,75 +88,68 @@ router.get('/users/:userId', isAuth, async (req, res) => {
 })
 
 router.post('/users/:userId/follow', isAuth, async (req, res) => {
-    if(req.user) {
-        const { userId } = req.params; 
+    const { userId } = req.params; 
 
-        const follow = await prisma.follows.create({
-            data: {
-                followedById:  req.user.id, 
-                followingId: Number(userId), 
-            }
-        }); 
-        const loggedUser = await prisma.user.findUnique({
-            where: {
-                id: req.user.id
-            }, 
-            include: {
-                following: {
-                    select: {
-                        followingId: true
-                    }
+    const follow = await prisma.follows.create({
+        data: {
+            followedById:  req.user.id, 
+            followingId: Number(userId), 
+        }
+    }); 
+    const loggedUser = await prisma.user.findUnique({
+        where: {
+            id: req.user.id
+        }, 
+        include: {
+            following: {
+                select: {
+                    followingId: true
                 }
             }
-
-        }); 
-        
-        res.sendStatus(200); 
-    }
+        }
+    }); 
+    
+    res.sendStatus(200); 
 }); 
 
 router.delete('/users/:userId/unfollow', isAuth, async (req, res) => {
-    if(req.user) {
-        const { userId } = req.params; 
+    const { userId } = req.params; 
 
-        const followRecord = await prisma.follows.findUnique({
+    const followRecord = await prisma.follows.findUnique({
+        where: {
+            followId: {
+                followedById:  req.user.id, 
+                followingId: Number(userId), 
+            }
+        }
+    })
+    
+    if(followRecord){
+        const follow = await prisma.follows.delete({
             where: {
                 followId: {
                     followedById:  req.user.id, 
                     followingId: Number(userId), 
                 }
             }
-        })
-        
-        if(followRecord){
-            const follow = await prisma.follows.delete({
-                where: {
-                    followId: {
-                        followedById:  req.user.id, 
-                        followingId: Number(userId), 
-                    }
-                }
-            }); 
-        }
-
-        res.sendStatus(200); 
+        }); 
     }
+
+    res.sendStatus(200); 
 }); 
 
 router.put('/users/:userId/update', isAuth, async (req, res) => {
-    if(req.user) {
-        const { bio, website } = req.body
-        const updatedUser = await prisma.user.update({
-            where: {
-                id: req.user.id
-            }, 
-            data: {
-                bio, 
-                website
-            }
-        })
-        res.sendStatus(200)
-    }
+    const { bio, website } = req.body
+    const updatedUser = await prisma.user.update({
+        where: {
+            id: req.user.id
+        }, 
+        data: {
+            bio, 
+            website
+        }
+    })
+    res.sendStatus(200)
 })
 
 export default router
